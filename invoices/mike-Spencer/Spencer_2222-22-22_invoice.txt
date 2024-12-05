@@ -1,0 +1,7 @@
+Invoice for Mike Spencer 
+Date: 2222-22-22
+Parts: ['wrench']
+Time Taken: 05 hours 30 minutes
+Labor Costs: £275.00
+Sales Tax: 20.0%
+Total Cost: £354.00
