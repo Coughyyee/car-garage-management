@@ -28,6 +28,8 @@ def add_default_data() -> None:
     add_default_costs()
 
     set_default_wrench_quantity()
+    set_default_parts_prices()
+    set_default_tools_prices()
 
 def add_default_user() -> None:
     con = sqlite3.connect(DB_PATH)
@@ -67,6 +69,43 @@ def set_default_wrench_quantity() -> None:
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
     cur.execute("UPDATE inventory SET quantity = 10 WHERE name = 'wrench'")
+    con.commit()
+    con.close()
+
+
+def set_default_parts_prices() -> None:
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    for item in [('brakes', 100), ('battery', 130), ('alternator', 250), ('engine', 1000), ('radiator', 400), ('muffler', 135), ('axels', 1250), ('spark plugs', 85), ('clutch', 1400), ('cooling system', 300), ('tire', 70), ('windshield wipers', 25), ('shock absorbers', 250)]:
+        cur.execute("SELECT id FROM inventory WHERE name = ?", (item[0],))
+        item_exists = cur.fetchone()
+
+        if item_exists:
+            # Update existing item
+            cur.execute("UPDATE inventory SET price = ? WHERE name = ?", (item[1], item[0]))
+        else:
+            # Insert new item
+            cur.execute("INSERT INTO inventory (name, price, quantity, expiration_date) VALUES (?, ?, 10, '2023-01-01')", (item[0], item[1]))
+
+    con.commit()
+    con.close()
+  
+def set_default_tools_prices() -> None:
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    for item in [('Screwdrivers', 15), ('Socket sets', 15), ('Impact wrench', 15), ('Wrenches', 15), ('Torque wrench', 15), ('Diagnostic tools', 15), ('Pliers', 15), ('Drill', 15), ('Gloves', 15), ('Tire gauge', 15), ('Engine tools', 15), ('Wire stripper', 15), ('Jack stands', 15), ('Pry bars', 15), ('Funnels', 15), ('Oil filter remover tool', 15), ('Oil drain tray (or bucket)', 15), ('Telescoping mirror', 15)]:
+        cur.execute("SELECT id FROM inventory WHERE name = ?", (item[0],))
+        item_exists = cur.fetchone()
+
+        if item_exists:
+            # Update existing item
+            cur.execute("UPDATE inventory SET price = ? WHERE name = ?", (item[1], item[0]))
+        else:
+            # Insert new item
+            cur.execute("INSERT INTO inventory (name, price, quantity, expiration_date) VALUES (?, ?, 5, '2023-01-01')", (item[0], item[1]))
+
     con.commit()
     con.close()
 

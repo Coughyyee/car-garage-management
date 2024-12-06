@@ -16,3 +16,14 @@ def fetch_sales_tax() -> float:
     sales_tax = cur.fetchone()
     con.close()
     return sales_tax[0]
+
+def fetch_user_password(username: str) -> str:
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+    cur.execute("SELECT password FROM users WHERE username = ?", (username,))
+    password = cur.fetchone()
+    con.close()
+    if password is None:
+        return "" 
+
+    return password[0]
